@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Nick open library</title>
+</head>
+<body>
+	<h2>Open library, search books</h2>
+	<input type="text" placeholder=" i.e OL7353617M" id="myInput">
+	<button id ="myBtn" onclick="getInputValue(); isbn();">Search</button>
+
+	<p id="title" style="color: #000000; font: bold; font-weight:bold"></p>
+	<p id ="author" style="color: #000000; font: bold; font-weight:bold" ></p>
+	</div>
+	
+	<script>
+		var inputVal=0;
+		var authorlink;
+		var authorcomplete;
+		var covernum;
+		var myImage = new Image();
+		function isbn() {
+			fetch("https://openlibrary.org/books/" + document.getElementById("myInput").value + ".json")
+			.then(response => response.json())
+			.then (data => {
+				console.log(data);
+				document.getElementById("title").innerHTML =  "Title is: " +  "'" + data.title + "'";
+				authorlink = data.authors[0].key;
+				fetch("https://openlibrary.org" + authorlink + ".json")
+				.then (response1 => response1.json())
+				.then (data1 =>{
+					console.log(data1);
+					document.getElementById("author").innerHTML = "Author is: " + "'" + data1.name + "'";
+					covernum = data.covers[0];
+					myImage.src = "https://covers.openlibrary.org/b/id/" + covernum +  "-L.jpg";
+					document.body.appendChild(myImage);
+				})
+			})
+
+		}
+
+		function getInputValue() {
+			inputVal = document.getElementById("myInput").value;
+			return inputVal;
+		}
+
+
+	</script>
+
+</body>
+</html>
